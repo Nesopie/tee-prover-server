@@ -40,7 +40,8 @@ RUN chmod 755 /usr/local/bin/start.sh
 
 COPY --from=rust-builder /src/target/release/tee-server /usr/local/bin/
 # COPY --from=circuit-builder /circuits /circuits
-COPY artifacts.zip /artifacts.zip
+WORKDIR /
+COPY artifacts.zip artifact.zip
 RUN unzip artifact.zip -d /circuits
 COPY ./zkeys /zkeys 
 
