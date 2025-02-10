@@ -25,7 +25,6 @@ impl WitnessGenerator {
         circuit_folder: &str, //folder where all the circuit executables are
     ) -> Result<(String, String), WitnessGeneratorError> {
         let circuit_folder_path = path::Path::new(&circuit_folder);
-        //TODO: covnert circuit_file_name to camel case if in snake case?
         let path = circuit_folder_path
             .join(format!("{}_cpp", &self.circuit_file_name))
             .join(&self.circuit_file_name);
@@ -35,7 +34,7 @@ impl WitnessGenerator {
             return Err(WitnessGeneratorError::CircuitNotFound);
         }
 
-        let circuit_exe = format!("./{}", path.into_os_string().into_string().unwrap());
+        let circuit_exe = format!(".{}", path.into_os_string().into_string().unwrap());
         let tmp_folder_path = get_tmp_folder_path(&self.uuid);
         let input_file = tmp_folder_path.clone() + "/input.json";
         let output_file = tmp_folder_path + "/output.wtns";
