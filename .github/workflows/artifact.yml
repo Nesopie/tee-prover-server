@@ -87,16 +87,16 @@ jobs:
       # build the eif
       - name: Build eifs
         run: |
-          mkdir measurements
-          touch measurements/register.log
-          touch measurements/disclose.log
-          touch measurements/dsc.log
-          sudo nitro-cli build-enclave --docker-uri ${{ secrets.DOCKER_USERNAME }}/tee-server-register --output-file prover-server-register.eif | measurements/register.log
-          sudo nitro-cli build-enclave --docker-uri ${{ secrets.DOCKER_USERNAME }}/tee-server-disclose --output-file prover-server-disclose.eif | measurements/register.log
-          sudo nitro-cli build-enclave --docker-uri ${{ secrets.DOCKER_USERNAME }}/tee-server-dsc --output-file prover-server-dsc.eif | measurements/register.log
+          mkdir measurements && sudo chmod 777 measurements
+          touch measurements/register.log && sudo chmod 777 measurements/register.log
+          touch measurements/disclose.log && sudo chmod 777 measurements/disclose.log
+          touch measurements/dsc.log && sudo chmod 777 measurements/dsc.log
+          sudo nitro-cli build-enclave --docker-uri ${{ secrets.DOCKER_USERNAME }}/tee-server-register --output-file prover-server-register.eif > measurements/register.log 2>&1
+          sudo nitro-cli build-enclave --docker-uri ${{ secrets.DOCKER_USERNAME }}/tee-server-disclose --output-file prover-server-disclose.eif > measurements/disclose.log 2>&1
+          sudo nitro-cli build-enclave --docker-uri ${{ secrets.DOCKER_USERNAME }}/tee-server-dsc --output-file prover-server-dsc.eif |> measurements/dsc.log 2>&1
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: tee-measurements.log
-          path: tee-measurements.log
+          name: measurements
+          path: measurements
