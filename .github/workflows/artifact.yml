@@ -26,3 +26,18 @@ jobs:
       - name: Download artifact
         run: |
           curl -L -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" -o artifact.zip "$ARTIFACT_URL"
+
+      # build the docker image
+      - name: Build Docker image
+        run: docker build -t tee-server .
+
+      # build the eif
+      - name: Build eif
+        run: |
+          sudo nitro-cli build-enclave --docker-uri tee-server --output-file prover-server.eif | tee-measurements.log
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: tee-measurements.log
+          path: tee-measurements.log
