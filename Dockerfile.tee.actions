@@ -37,12 +37,14 @@ RUN ./build_gmp.sh host && \
 COPY start.sh /usr/local/bin
 RUN chown root:root /usr/local/bin/start.sh
 RUN chmod 755 /usr/local/bin/start.sh
+ARG PROOFTYPE=${PROOFTYPE}
 
 COPY --from=rust-builder /src/target/release/tee-server /usr/local/bin/
 # COPY --from=circuit-builder /circuits /circuits
 WORKDIR /
 COPY artifact.zip artifact.zip
-RUN unzip artifact.zip -d /circuits
+RUN unzip artifact.zip -d /all-circuits
+RUN mv /all-circuits/$PROOFTYPE /circuits
 COPY ./zkeys /zkeys 
 
 CMD ["/usr/local/bin/start.sh"]

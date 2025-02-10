@@ -47,9 +47,9 @@ jobs:
           touch measurements/register.log
           touch measurements/disclose.log
           touch measurements/dsc.log
-          sudo nitro-cli build-enclave --docker-uri tee-server --output-file prover-server.eif | measurements/register.log
-          sudo nitro-cli build-enclave --docker-uri tee-server --output-file prover-server.eif | measurements/register.log
-          sudo nitro-cli build-enclave --docker-uri tee-server --output-file prover-server.eif | measurements/register.log
+          sudo nitro-cli build-enclave --docker-uri tee-server-reggister --output-file prover-server.eif | measurements/register.log
+          sudo nitro-cli build-enclave --docker-uri tee-server-disclose --output-file prover-server.eif | measurements/register.log
+          sudo nitro-cli build-enclave --docker-uri tee-server-dsc --output-file prover-server.eif | measurements/register.log
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
