@@ -33,12 +33,24 @@ jobs:
           git submodule update --init
           cd rapidsnark && git submodule update --init && cd ..
 
+      - name: Log in to Docker Hub
+        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
       # build the docker image
       - name: Build Docker image
         run: |
-          sudo docker build --build-arg PROOFTYPE=register -f Dockerfile.tee.actions -t tee-server-register .
-          sudo docker build --build-arg PROOFTYPE=disclose -f Dockerfile.tee.actions -t tee-server-disclose .
-          sudo docker build --build-arg PROOFTYPE=dsc -f Dockerfile.tee.actions -t tee-server-dsc .
+          sudo docker build --build-arg PROOFTYPE=register -f Dockerfile.tee.actions -t ${{ secrets.DOCKER_USERNAME }}/tee-server-register .
+          sudo docker build --build-arg PROOFTYPE=disclose -f Dockerfile.tee.actions -t ${{ secrets.DOCKER_USERNAME }}/tee-server-disclose .
+          sudo docker build --build-arg PROOFTYPE=dsc -f Dockerfile.tee.actions -t ${{ secrets.DOCKER_USERNAME }}/tee-server-dsc .
+
+      - name: Push docker images
+        run: |
+          sudo docker push ${{ secrets.DOCKER_USERNAME }}/tee-server-register
+          sudo docker push ${{ secrets.DOCKER_USERNAME }}/tee-server-disclose
+          sudo docker push ${{ secrets.DOCKER_USERNAME }}/tee-server-dsc
 
       # build the eif
       - name: Build eifs
@@ -47,9 +59,9 @@ jobs:
           touch measurements/register.log
           touch measurements/disclose.log
           touch measurements/dsc.log
-          sudo nitro-cli build-enclave --docker-uri tee-server-reggister --output-file prover-server.eif | measurements/register.log
-          sudo nitro-cli build-enclave --docker-uri tee-server-disclose --output-file prover-server.eif | measurements/register.log
-          sudo nitro-cli build-enclave --docker-uri tee-server-dsc --output-file prover-server.eif | measurements/register.log
+          sudo nitro-cli build-enclave --docker-uri ${{ secrets.DOCKER_USERNAME }}/tee-server-reggister --output-file prover-server-register.eif | measurements/register.log
+          sudo nitro-cli build-enclave --docker-uri ${{ secrets.DOCKER_USERNAME }}/tee-server-disclose --output-file prover-server-disclose.eif | measurements/register.log
+          sudo nitro-cli build-enclave --docker-uri ${{ secrets.DOCKER_USERNAME }}/tee-server-dsc --output-file prover-server-dsc.eif | measurements/register.log
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
