@@ -91,7 +91,7 @@ jobs:
           touch measurements/register.log
           touch measurements/disclose.log
           touch measurements/dsc.log
-          sudo nitro-cli build-enclave --docker-uri ${{ secrets.DOCKER_USERNAME }}/tee-server-reggister --output-file prover-server-register.eif | measurements/register.log
+          sudo nitro-cli build-enclave --docker-uri ${{ secrets.DOCKER_USERNAME }}/tee-server-register --output-file prover-server-register.eif | measurements/register.log
           sudo nitro-cli build-enclave --docker-uri ${{ secrets.DOCKER_USERNAME }}/tee-server-disclose --output-file prover-server-disclose.eif | measurements/register.log
           sudo nitro-cli build-enclave --docker-uri ${{ secrets.DOCKER_USERNAME }}/tee-server-dsc --output-file prover-server-dsc.eif | measurements/register.log
 
