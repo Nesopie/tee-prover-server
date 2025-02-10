@@ -40,17 +40,46 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       # build the docker image
-      - name: Build Docker image
-        run: |
-          sudo docker build --build-arg PROOFTYPE=register -f Dockerfile.tee.actions -t ${{ secrets.DOCKER_USERNAME }}/tee-server-register:latest .
-          sudo docker build --build-arg PROOFTYPE=disclose -f Dockerfile.tee.actions -t ${{ secrets.DOCKER_USERNAME }}/tee-server-disclose:latest .
-          sudo docker build --build-arg PROOFTYPE=dsc -f Dockerfile.tee.actions -t ${{ secrets.DOCKER_USERNAME }}/tee-server-dsc:latest .
+      - name: Build and push Docker register docker image
+        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
+          with:
+            context: .
+            file: ./Dockerfile.tee.actions
+            push: true
+            tags: ${{ secrets.DOCKER_USERNAME }}/tee-server-register:latest
+            build-args: |
+              PROOFTYPE=register
+      - name: Build and push Docker register docker image
+          uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
+          with:
+            context: .
+            file: ./Dockerfile.tee.actions
+            push: true
+            tags: ${{ secrets.DOCKER_USERNAME }}/tee-server-disclose:latest
+            build-args: |
+              PROOFTYPE=disclose
 
-      - name: Push docker images
-        run: |
-          sudo docker push ${{ secrets.DOCKER_USERNAME }}/tee-server-register:latest
-          sudo docker push ${{ secrets.DOCKER_USERNAME }}/tee-server-disclose:latest
-          sudo docker push ${{ secrets.DOCKER_USERNAME }}/tee-server-dsc:latest
+      - name: Build and push Docker register docker image
+        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
+          with:
+            context: .
+            file: ./Dockerfile.tee.actions
+            push: true
+            tags: ${{ secrets.DOCKER_USERNAME }}/tee-server-dsc:latest
+            build-args: |
+              PROOFTYPE=dsc
+
+      # - name: Build Docker image
+      #   run: |
+      #     sudo docker build --build-arg PROOFTYPE=register -f Dockerfile.tee.actions -t ${{ secrets.DOCKER_USERNAME }}/tee-server-register:latest .
+      #     sudo docker build --build-arg PROOFTYPE=disclose -f Dockerfile.tee.actions -t ${{ secrets.DOCKER_USERNAME }}/tee-server-disclose:latest .
+      #     sudo docker build --build-arg PROOFTYPE=dsc -f Dockerfile.tee.actions -t ${{ secrets.DOCKER_USERNAME }}/tee-server-dsc:latest .
+
+      # - name: Push docker images
+      #   run: |
+      #     sudo docker push ${{ secrets.DOCKER_USERNAME }}/tee-server-register:latest
+      #     sudo docker push ${{ secrets.DOCKER_USERNAME }}/tee-server-disclose:latest
+      #     sudo docker push ${{ secrets.DOCKER_USERNAME }}/tee-server-dsc:latest
 
       # build the eif
       - name: Build eifs
