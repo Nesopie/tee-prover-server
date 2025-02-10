@@ -6,6 +6,8 @@ ip link set dev lo up
 socat VSOCK-LISTEN:8888,fork tcp-connect:127.0.0.1:8888,reuseaddr & # for the json rpc server
 socat tcp-listen:8889,fork vsock-connect:3:8889,reuseaddr & # for the db
 
+ls zkeys
+
 ./usr/local/bin/tee-server \
     --server-address=127.0.0.1:8888 \
     --database-url=postgres://postgres:passport@127.0.0.2:8889/openpassport \

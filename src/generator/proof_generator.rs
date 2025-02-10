@@ -37,6 +37,8 @@ impl ProofGenerator {
             return Err("Public inputs file does not exist".to_string());
         }
 
+        dbg!(&self.zkey_file_path);
+
         match tokio::process::Command::new(format!("./{}", rapid_snark_path_exe))
             .arg(&self.zkey_file_path)
             .arg(witness_file_path)
