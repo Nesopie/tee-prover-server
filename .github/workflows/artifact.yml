@@ -29,7 +29,10 @@ jobs:
 
       # build the docker image
       - name: Build Docker image
-        run: sudo docker build -f Dockerfile.tee.actions -t tee-server .
+        run: |
+          sudo docker build --build-arg PROOFTYPE=register -f Dockerfile.tee.actions -t tee-server .
+          sudo docker build --build-arg PROOFTYPE=disclose -f Dockerfile.tee.actions -t tee-server .
+          sudo docker build --build-arg PROOFTYPE=dsc -f Dockerfile.tee.actions -t tee-server .
 
       # build the eif
       - name: Build eif
