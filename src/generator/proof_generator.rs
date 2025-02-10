@@ -46,6 +46,7 @@ impl ProofGenerator {
             .await
         {
             Ok(output) => {
+                dbg!(&output);
                 if !output.status.success() || output.stderr.len() > 0 {
                     return Err("Proof failed".to_string());
                 }
