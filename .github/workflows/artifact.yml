@@ -26,6 +26,10 @@ jobs:
       - name: Download artifact
         run: |
           curl -L -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" -o artifact.zip "$ARTIFACT_URL"
+      - name: Init submodules
+        run: |
+          git submodule update --init
+          cd rapidsnark && git submodule update --init && cd ..
 
       # build the docker image
       - name: Build Docker image
