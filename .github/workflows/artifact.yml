@@ -37,7 +37,7 @@ jobs:
           sudo nitro-cli build-enclave --docker-uri tee-server --output-file prover-server.eif | tee-measurements.log
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: tee-measurements.log
           path: tee-measurements.log
