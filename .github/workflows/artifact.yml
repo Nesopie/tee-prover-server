@@ -30,14 +30,20 @@ jobs:
       # build the docker image
       - name: Build Docker image
         run: |
-          sudo docker build --build-arg PROOFTYPE=register -f Dockerfile.tee.actions -t tee-server .
-          sudo docker build --build-arg PROOFTYPE=disclose -f Dockerfile.tee.actions -t tee-server .
-          sudo docker build --build-arg PROOFTYPE=dsc -f Dockerfile.tee.actions -t tee-server .
+          sudo docker build --build-arg PROOFTYPE=register -f Dockerfile.tee.actions -t tee-server-register .
+          sudo docker build --build-arg PROOFTYPE=disclose -f Dockerfile.tee.actions -t tee-server-disclose .
+          sudo docker build --build-arg PROOFTYPE=dsc -f Dockerfile.tee.actions -t tee-server-dsc .
 
       # build the eif
-      - name: Build eif
+      - name: Build eifs
         run: |
-          sudo nitro-cli build-enclave --docker-uri tee-server --output-file prover-server.eif | tee-measurements.log
+          mkdir measurements
+          touch measurements/register.log
+          touch measurements/disclose.log
+          touch measurements/dsc.log
+          sudo nitro-cli build-enclave --docker-uri tee-server --output-file prover-server.eif | measurements/register.log
+          sudo nitro-cli build-enclave --docker-uri tee-server --output-file prover-server.eif | measurements/register.log
+          sudo nitro-cli build-enclave --docker-uri tee-server --output-file prover-server.eif | measurements/register.log
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
